@@ -20,7 +20,7 @@ These wheels are intended for:
 
 | Build | PyTorch | CUDA | Python |
 |-------|---------|------|--------|
-| **Recommended** | 2.11.0 | 13.0 | cp312, cp313 |
+| **Recommended** (current Colab default) | 2.11.0 | 13.0 | cp312, cp313 |
 | Old | 2.11.0 | 12.8 | cp312, cp313 |
 | 2.13.0+cu130 | 2.13.0 | 13.0 | cp312, cp313 |
 | **Latest** | 2.13.0 | 13.2 | cp313 |
@@ -45,7 +45,22 @@ The wheels are compiled specifically for **CUDA Compute Capability 7.5 (SM75)**.
 
 Pick a build from `legacy_wheels/` or `optimized_wheels/` depending on your workflow (see [Repository structure](#repository-structure)).
 
-### legacy_wheels — PyTorch 2.11.0 + CUDA 13.0
+General rules for every build:
+
+- Restart the runtime after changing the PyTorch version, and only then run the wheel installation.
+- Install the SageAttention wheel with `--no-deps`, so that pip does not replace the installed PyTorch.
+- Install `xformers` and `torchaudio` with `--no-deps` when PyTorch was installed manually.
+
+### optimized_wheels — PyTorch 2.11.0 + CUDA 13.0 (current Colab default)
+
+The current default Colab image already ships PyTorch 2.11.0 + CUDA 13.0. PyTorch does not need to be reinstalled:
+
+```
+!pip install -U xformers==0.0.35 --no-deps \
+    --index-url https://download.pytorch.org/whl/cu130
+```
+
+Only if the runtime has a different PyTorch build, reinstall it first:
 
 ```
 # Uninstall conflicting CUDA 12 RAPIDS packages
@@ -73,16 +88,20 @@ Pick a build from `legacy_wheels/` or `optimized_wheels/` depending on your work
     --index-url https://download.pytorch.org/whl/cu130
 ```
 
+Then install the wheel:
+
 ```
 %cd /content
 
 !wget -O sageattention-2.1.2-cp313-cp313-linux_x86_64.whl \
-https://github.com/netrunner-exe/SageAttention2-Colab-Wheels/raw/main/legacy_wheels/colab-torch-cp313-2.11.0%2Bcu130/sageattention-2.1.2-cp313-cp313-linux_x86_64.whl
+https://github.com/netrunner-exe/SageAttention2-Colab-Wheels/raw/main/optimized_wheels/colab-torch-cp313-2.11.0%2Bcu130/sageattention-2.1.2-cp313-cp313-linux_x86_64.whl
 
-!pip install sageattention-2.1.2-cp313-cp313-linux_x86_64.whl
+!pip install --no-deps sageattention-2.1.2-cp313-cp313-linux_x86_64.whl
 ```
 
-### legacy_wheels — PyTorch 2.13.0 + CUDA 13.2
+### optimized_wheels — PyTorch 2.13.0 + CUDA 13.2
+
+Install the packages in exactly this order and keep the `--no-deps` flags.
 
 ```
 # Uninstall conflicting CUDA 12 RAPIDS packages
@@ -107,48 +126,62 @@ https://github.com/netrunner-exe/SageAttention2-Colab-Wheels/raw/main/legacy_whe
 !pip install -U --force-reinstall \
     torch==2.13.0 \
     torchvision==0.28.0 \
-    torchaudio==2.13.0 \
     --index-url https://download.pytorch.org/whl/cu132
 
-!pip install -U --pre torchaudio \
-    --index-url https://download.pytorch.org/whl/nightly/cu132
+# Align NVIDIA cuDNN packages with the Colab image
+!pip install -U \
+    nvidia-cudnn-cu12==9.26.0.51 \
+    nvidia-cudnn-cu13==9.26.0.51 \
+    --no-deps
 
-!pip install -U xformers==0.0.35 \
+# No stable torchaudio for cu132: install the stable 2.11.0 build without touching torch
+!pip install -U torchaudio==2.11.0 --no-deps \
     --index-url https://download.pytorch.org/whl/cu130
+
+# The PyPI xformers wheel declares torch>=2.10
+!pip install -U xformers==0.0.35 --no-deps
 ```
 
 ```
 %cd /content
 
 !wget -O sageattention-2.1.2-cp313-cp313-linux_x86_64.whl \
-https://github.com/netrunner-exe/SageAttention2-Colab-Wheels/raw/main/legacy_wheels/colab-torch-cp313-2.13.0%2Bcu132/sageattention-2.1.2-cp313-cp313-linux_x86_64.whl
+https://github.com/netrunner-exe/SageAttention2-Colab-Wheels/raw/main/optimized_wheels/colab-torch-cp313-2.13.0%2Bcu132/sageattention-2.1.2-cp313-cp313-linux_x86_64.whl
 
-!pip install sageattention-2.1.2-cp313-cp313-linux_x86_64.whl
+!pip install --no-deps sageattention-2.1.2-cp313-cp313-linux_x86_64.whl
 ```
 
-### legacy_wheels — Default Google Colab (PyTorch 2.11.0 + CUDA 12.8)
+### optimized_wheels — Older Colab images (PyTorch 2.11.0 + CUDA 12.8)
 
-```
-%cd /content
-
-!wget -O sageattention-2.1.2-cp313-cp313-linux_x86_64.whl \
-https://github.com/netrunner-exe/SageAttention2-Colab-Wheels/raw/main/legacy_wheels/colab-torch-cp313-2.11.0%2Bcu128/sageattention-2.1.2-cp313-cp313-linux_x86_64.whl
-
-!pip install sageattention-2.1.2-cp313-cp313-linux_x86_64.whl
-```
-
-### optimized_wheels
-
-Same pip/RAPIDS/PyTorch preparation steps as above, matched to the corresponding CUDA version. Fetch the wheel from the `optimized_wheels` folder instead, e.g.:
+For Colab images that still ship PyTorch 2.11.0 + CUDA 12.8:
 
 ```
 %cd /content
 
 !wget -O sageattention-2.1.2-cp313-cp313-linux_x86_64.whl \
-https://github.com/netrunner-exe/SageAttention2-Colab-Wheels/raw/main/optimized_wheels/colab-torch-cp313-2.11.0%2Bcu130/sageattention-2.1.2-cp313-cp313-linux_x86_64.whl
+https://github.com/netrunner-exe/SageAttention2-Colab-Wheels/raw/main/optimized_wheels/colab-torch-cp313-2.11.0%2Bcu128/sageattention-2.1.2-cp313-cp313-linux_x86_64.whl
 
-!pip install sageattention-2.1.2-cp313-cp313-linux_x86_64.whl
+!pip install --no-deps sageattention-2.1.2-cp313-cp313-linux_x86_64.whl
 ```
+
+### legacy_wheels
+
+Same pip/RAPIDS/PyTorch preparation steps as above, matched to the corresponding CUDA version. Fetch the wheel from the `legacy_wheels` folder instead, e.g.:
+
+```
+%cd /content
+
+!wget -O sageattention-2.1.2-cp313-cp313-linux_x86_64.whl \
+https://github.com/netrunner-exe/SageAttention2-Colab-Wheels/raw/main/legacy_wheels/colab-torch-cp313-2.11.0%2Bcu130/sageattention-2.1.2-cp313-cp313-linux_x86_64.whl
+
+!pip install --no-deps sageattention-2.1.2-cp313-cp313-linux_x86_64.whl
+```
+
+## Troubleshooting
+
+- **Do not install nightly `torchaudio`** with stable PyTorch. There is no stable `torchaudio` build for CUDA 13.2, and the nightly build is not compatible with stable PyTorch (see [Comfy-Org/ComfyUI#14232](https://github.com/Comfy-Org/ComfyUI/issues/14232)). Use `torchaudio==2.11.0 --no-deps` as above.
+- **Always use `--no-deps`** for `xformers`, `torchaudio`, and the SageAttention wheel after PyTorch was installed manually. Without it, pip may replace the installed PyTorch and the NVIDIA libraries.
+- **Restart the runtime** after reinstalling PyTorch. A torch module imported earlier in the same session keeps the old libraries loaded.
 
 ## Usage
 
