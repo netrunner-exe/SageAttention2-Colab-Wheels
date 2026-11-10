@@ -4,8 +4,9 @@ Prebuilt wheels of **SageAttention 2.1.2** for Google Colab, compiled for **NVID
 
 ## Repository structure
 
-- **[`legacy_wheels/`](legacy_wheels/README.md)** — built from [Ph0rk0z/SageAttention2](https://github.com/Ph0rk0z/SageAttention2). Confirmed broken on **Krea 2** and **Flux-family DiT models**; confirmed working on **MiniMax H3**.
-- **[`optimized_wheels/`](optimized_wheels/README.md)** — built from an updated fork, [1506086927/SageAttention2_Optimized_Test](https://github.com/1506086927/SageAttention2_Optimized_Test). Does not have the Krea 2 / Flux-family DiT issues seen in `legacy_wheels`.
+- **[`legacy_wheels/`](legacy_wheels/README.md)** - built from [Ph0rk0z/SageAttention2](https://github.com/Ph0rk0z/SageAttention2). Confirmed broken on **Krea 2** and **Flux-family DiT models**; confirmed working on **MiniMax H3**.
+- **[`optimized_wheels/`](optimized_wheels/README.md)** - built from an updated fork, [1506086927/SageAttention2_Optimized_Test](https://github.com/1506086927/SageAttention2_Optimized_Test). Does not have the Krea 2 / Flux-family DiT issues seen in `legacy_wheels`.
+- **[`test_wheels/`](test_wheels/README.md)** - built from my updated fork: **[netrunner-exe/SageAttention-Turing](https://github.com/netrunner-exe/SageAttention-Turing)**. Does not have the Krea 2 / Flux-family DiT issues seen in `legacy_wheels`.
 
 ## Compatibility
 
@@ -23,7 +24,8 @@ These wheels are intended for:
 | **Recommended** (current Colab default) | 2.11.0 | 13.0 | cp312, cp313 |
 | Old | 2.11.0 | 12.8 | cp312, cp313 |
 | 2.13.0+cu130 | 2.13.0 | 13.0 | cp312, cp313 |
-| **Latest** | 2.13.0 | 13.2 | cp313 |
+| 2.13.0+cu132 | 2.13.0 | 13.0 | cp313 |
+| **Latest** | 2.15.0 | 13.2 | cp313 |
 
 ## Features
 
@@ -51,7 +53,7 @@ General rules for every build:
 - Install the SageAttention wheel with `--no-deps`, so that pip does not replace the installed PyTorch.
 - Install `xformers` and `torchaudio` with `--no-deps` when PyTorch was installed manually.
 
-### optimized_wheels — PyTorch 2.11.0 + CUDA 13.0 (current Colab default)
+### optimized_wheels - PyTorch 2.11.0 + CUDA 13.0 (current Colab default)
 
 The current default Colab image already ships PyTorch 2.11.0 + CUDA 13.0. PyTorch does not need to be reinstalled:
 
@@ -99,7 +101,7 @@ https://github.com/netrunner-exe/SageAttention2-Colab-Wheels/raw/main/optimized_
 !pip install --no-deps sageattention-2.1.2-cp313-cp313-linux_x86_64.whl
 ```
 
-### optimized_wheels — PyTorch 2.13.0 + CUDA 13.2
+### optimized_wheels - PyTorch 2.13.0 + CUDA 13.2
 
 Install the packages in exactly this order and keep the `--no-deps` flags.
 
@@ -151,7 +153,7 @@ https://github.com/netrunner-exe/SageAttention2-Colab-Wheels/raw/main/optimized_
 !pip install --no-deps sageattention-2.1.2-cp313-cp313-linux_x86_64.whl
 ```
 
-### optimized_wheels — Older Colab images (PyTorch 2.11.0 + CUDA 12.8)
+### optimized_wheels - Older Colab images (PyTorch 2.11.0 + CUDA 12.8)
 
 For Colab images that still ship PyTorch 2.11.0 + CUDA 12.8:
 

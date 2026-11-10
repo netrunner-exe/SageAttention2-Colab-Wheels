@@ -16,7 +16,7 @@ Wheel filename in all folders: `sageattention-2.1.2-cp313-cp313-linux_x86_64.whl
 
 ## Known issues
 
-- **Krea 2** — confirmed broken.
-- **MiniMax H3** — confirmed working.
+- **Krea 2** - confirmed broken.
+- **MiniMax H3** - confirmed working.
 
 If your workflow uses Krea 2 or a Flux-family DiT model, use `optimized_wheels` instead.
