@@ -24,7 +24,7 @@ These wheels are intended for:
 | **Recommended** (current Colab default) | 2.11.0 | 13.0 | cp312, cp313 |
 | Old | 2.11.0 | 12.8 | cp312, cp313 |
 | 2.13.0+cu130 | 2.13.0 | 13.0 | cp312, cp313 |
-| 2.13.0+cu132 | 2.13.0 | 13.0 | cp313 |
+| 2.13.0+cu132 | 2.13.0 | 13.2 | cp313 |
 | **Latest** | 2.15.0 | 13.2 | cp313 |
 
 ## Features
